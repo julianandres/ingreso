@@ -12,40 +12,51 @@ import dominio.repositorio.RepositorioPrestamo;
 public class Bibliotecario {
 
 	public static final String EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE = "El libro no se encuentra disponible";
+	public static final String LOS_LIBROS_POLINDROMOS_SOLO_SE_PUEDEN_UTILIZAR_EN_LA_BIBLIOTECA = "Los libros políndromos solo se pueden utilizar en la biblioteca";
 
 	private RepositorioLibro repositorioLibro;
 	private RepositorioPrestamo repositorioPrestamo;
-	private static final Log log = LogFactory.getLog(Bibliotecario.class);
-
+	
 	public Bibliotecario(RepositorioLibro repositorioLibro, RepositorioPrestamo repositorioPrestamo) {
 		this.repositorioLibro = repositorioLibro;
 		this.repositorioPrestamo = repositorioPrestamo;
 
 	}
 
-	public void prestar(String isbn) {
-		System.out.println("ingreso prestar");
-		Libro lb = repositorioLibro.obtenerPorIsbn(isbn);
-		System.out.println(lb!=null?lb.getTitulo():"---libro no encontrado");
-		
-		Prestamo pr = repositorioPrestamo.obtener(isbn);
-		System.out.println("iniciado prestar libro");
-		if (lb != null) {
-			if (pr != null) {
-				System.out.println("libro, prestado");
-				throw new PrestamoException(EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);
-			} else {
-				System.out.println("libro no prestado");
-				Prestamo prestamo = new Prestamo(new Date(), lb, new Date(), "username");
-				repositorioPrestamo.agregar(prestamo);
+	public void prestar(String isbn,Prestamo prestamoEntrante) {
+		if (!verificarPolindromos(isbn)) {
+			Libro lb = repositorioLibro.obtenerPorIsbn(isbn);
+			Prestamo pr = repositorioPrestamo.obtener(isbn);
+			if (lb != null) {
+				if (pr != null) {
+					throw new PrestamoException(EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);
+				} else {
+					Prestamo prestamo = new Prestamo(prestamoEntrante.getFechaSolicitud(), lb, new Date(), prestamoEntrante.getNombreUsuario());
+					repositorioPrestamo.agregar(prestamo);
+				}
 			}
+		}else {
+			throw new PrestamoException(LOS_LIBROS_POLINDROMOS_SOLO_SE_PUEDEN_UTILIZAR_EN_LA_BIBLIOTECA);
 		}
 
 	}
-
+	
 	public boolean esPrestado(String isbn) {
 		Libro pr = repositorioPrestamo.obtenerLibroPrestadoPorIsbn(isbn);
 		return pr != null;
+	}
+
+	public boolean verificarPolindromos(String isbn) {
+		int longitud = isbn.length();
+		String nuevaCadena = "";
+		int i = longitud - 1;
+		do {
+			char caracter = isbn.charAt(i);
+			nuevaCadena += caracter;
+			i--;
+		} while (nuevaCadena.length() != isbn.length());
+		System.out.println(nuevaCadena);
+		return nuevaCadena.equals(isbn);
 	}
 
 }
