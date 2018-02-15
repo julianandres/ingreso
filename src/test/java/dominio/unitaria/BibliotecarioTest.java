@@ -2,7 +2,6 @@ package dominio.unitaria;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +17,7 @@ import testdatabuilder.LibroTestDataBuilder;
 
 public class BibliotecarioTest {
 
+	private static final String ISBN_POLINDROMO = "123a321";
 	@Test
 	public void esPrestadoTest() {
 
@@ -61,12 +61,16 @@ public class BibliotecarioTest {
 		// assert
 		assertFalse(esPrestado);
 	}
-
+/**
+ * Durante esta prueba se lleva a cabo una muestra de un líbro políndromo, se ajusta la prueba para que demuestre que 
+ * al intentar prestar el libro se retorna el mensaje de error pertinente a este caso, 
+ * Se resuelve el punto 3
+ * */
 	@Test
 	public void prestarLibroPolindromo() {
 
 		// arrange
-		LibroTestDataBuilder libroTestDataBuilder = new LibroTestDataBuilder().conIsbn("a3d3a");
+		LibroTestDataBuilder libroTestDataBuilder = new LibroTestDataBuilder().conIsbn(ISBN_POLINDROMO);
 
 		Libro libro = libroTestDataBuilder.build();
 
@@ -83,7 +87,7 @@ public class BibliotecarioTest {
 		} catch (PrestamoException e) {
 			// assert
 			System.out.println(e.getMessage());
-			Assert.assertEquals(Bibliotecario.LOS_LIBROS_POLINDROMOS_SOLO_SE_PUEDEN_UTILIZAR_EN_LA_BIBLIOTECA, e.getMessage());
+			Assert.assertEquals(Bibliotecario.LOS_LIBROS_POLINDROMOS_SOLO_SE_PUEDEN_UTILIZAR_EN_LA_BIBLIOTECA, e.getMessage());//Prueba unitaria de prestamo libros políndromos, punto 3
 		}
 
 	}

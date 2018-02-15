@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dominio.unitaria.BibliotecarioTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2018-02-15T03:16:29" hostname="mvtesting" time="0.137">
+  <properties/>
+  <testcase name="esPrestadoTest" classname="dominio.unitaria.BibliotecarioTest" time="0.136"/>
+  <testcase name="prestarLibroPolindromo" classname="dominio.unitaria.BibliotecarioTest" time="0.001"/>
+  <testcase name="libroNoPrestadoTest" classname="dominio.unitaria.BibliotecarioTest" time="0.0"/>
+  <system-out><![CDATA[123a321
+Los libros políndromos solo se pueden utilizar en la biblioteca
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
